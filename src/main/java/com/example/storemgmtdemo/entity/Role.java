@@ -2,14 +2,15 @@ package com.example.storemgmtdemo.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity(name = "role_details")
 public class Role {
 
 	@Id
-	@GeneratedValue
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer roleId;
 	private String roleName;
 	private String roleDescription;
 
@@ -38,10 +39,10 @@ public class Role {
 	}
 
 	public Integer getId() {
-		return id;
+		return roleId;
 	}
 
 	public void setId(Integer id) {
-		this.id = id;
+		this.roleId = id;
 	}
 }

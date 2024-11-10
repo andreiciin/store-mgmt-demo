@@ -9,7 +9,7 @@ import java.util.List;
 public class Order {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private Long totalCost;
 	private LocalDate orderDate;

@@ -7,14 +7,14 @@ import java.util.List;
 @Entity(name = "user_details")
 public class User {
 	@Id
-	@GeneratedValue
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer userId;
 	private String name;
 	private String email;
 	private String password;
 	private String address;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "user_roles",
 			joinColumns = @JoinColumn(name = "user_id"),
@@ -26,7 +26,7 @@ public class User {
 	private List<Order> orders;
 
 	public User(Integer id, String name, String email, String address) {
-		this.id = id;
+		this.userId = id;
 		this.name = name;
 		this.email = email;
 		this.address = address;
@@ -37,11 +37,11 @@ public class User {
 	}
 
 	public Integer getId() {
-		return id;
+		return userId;
 	}
 
 	public void setId(Integer id) {
-		this.id = id;
+		this.userId = id;
 	}
 
 	public String getName() {
