@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class ProductController {
@@ -18,13 +17,8 @@ public class ProductController {
 	}
 
 	@GetMapping("/products/{id}")
-	public Optional<Product> getProductById(@PathVariable Integer id) {
-		Optional<Product> product = productService.getProductById(id);
-
-		if (product.isEmpty())
-			throw new ProductNotFoundException("Product with following id does not exist: " + id);
-
-		return product;
+	public Product getProductById(@PathVariable Integer id) {
+		return productService.getProductById(id);
 	}
 
 	@PostMapping("/products")

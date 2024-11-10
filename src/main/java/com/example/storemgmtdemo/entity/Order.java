@@ -13,7 +13,7 @@ public class Order {
 	private Integer id;
 	private Long totalCost;
 	private LocalDate orderDate;
-	@OneToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "order_products",
 			joinColumns = @JoinColumn(name = "order_id"),

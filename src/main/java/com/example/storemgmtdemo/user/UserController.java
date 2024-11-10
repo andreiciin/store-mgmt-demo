@@ -44,7 +44,7 @@ public class UserController {
 	public Optional<User> updateUser(@PathVariable int id, @RequestBody User updatedUser) {
 		Optional<User> existingUser = userRepository.findById(id);
 
-		if (existingUser.isEmpty()) {
+		if (existingUser.get() == null) {
 			throw new UserNotFoundException("User with the following id does not exist: " + id);
 		}
 

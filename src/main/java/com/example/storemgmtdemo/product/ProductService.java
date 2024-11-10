@@ -1,7 +1,9 @@
 package com.example.storemgmtdemo.product;
 
+import com.example.storemgmtdemo.entity.Order;
 import com.example.storemgmtdemo.entity.Product;
 import com.example.storemgmtdemo.entity.User;
+import com.example.storemgmtdemo.order.OrderRepository;
 import com.example.storemgmtdemo.user.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +17,15 @@ public class ProductService {
 	@Autowired
 	private ProductRepository productRepository;
 
+	@Autowired
+	private OrderRepository orderRepository;
+
 	public List<Product> getAllProducts() {
 		return productRepository.findAll();
 	}
 
-	public Optional<Product> getProductById(Integer id) {
-		return productRepository.findById(id);
+	public Product getProductById(Integer id) {
+		return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with the following id does not exist: " + id));
 	}
 
 	public Product createProduct(Product product) {
@@ -28,6 +33,14 @@ public class ProductService {
 	}
 
 	public void deleteProduct(Integer id) {
+		Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product with the following id does not exist: " + id));
+		List<Order> ordersWithProduct = orderRepository.findAllByProductListContaining(product);
+
+		for (Order order : ordersWithProduct) {
+			order.getProductList().remove(product);
+			orderRepository.save(order);
+		}
+
 		productRepository.deleteById(id);
 	}
 
