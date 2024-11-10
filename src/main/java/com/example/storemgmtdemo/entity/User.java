@@ -1,7 +1,14 @@
 package com.example.storemgmtdemo.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity(name = "user_details")
 public class User {
 
+	@Id
+	@GeneratedValue
 	private Integer id;
 	private String name;
 	private String email;
@@ -15,6 +22,10 @@ public class User {
 		this.name = name;
 		this.email = email;
 		this.address = address;
+	}
+
+	public User() {
+
 	}
 
 	public Integer getId() {
@@ -47,5 +58,13 @@ public class User {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }
