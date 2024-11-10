@@ -1,5 +1,7 @@
 package com.example.storemgmtdemo.user;
 
+import com.example.storemgmtdemo.entity.Order;
+import com.example.storemgmtdemo.entity.Role;
 import com.example.storemgmtdemo.entity.User;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,5 +58,27 @@ public class UserController {
 		userRepository.save(user);
 
 		return Optional.of(user);
+	}
+
+	@GetMapping("/users/{id}/roles")
+	public List<Role> getUserRoles(@PathVariable int id) {
+		Optional<User> user = userRepository.findById(id);
+
+		if (user.isEmpty()) {
+			throw new UserNotFoundException("User with the following id does not exist: " + id);
+		}
+
+		return user.get().getRoles();
+	}
+
+	@GetMapping("/users/{id}/orders")
+	public List<Order> getUserOrders(@PathVariable int id) {
+		Optional<User> user = userRepository.findById(id);
+
+		if (user.isEmpty()) {
+			throw new UserNotFoundException("User with the following id does not exist: " + id);
+		}
+
+		return user.get().getOrders();
 	}
 }

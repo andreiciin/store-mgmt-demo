@@ -49,6 +49,7 @@ public class OrderService {
 					order.setTotalCost(newOrder.getTotalCost() == null ? existingOrder.get().getTotalCost() : newOrder.getTotalCost());
 					order.setOrderDate(newOrder.getOrderDate() == null ? existingOrder.get().getOrderDate() : newOrder.getOrderDate());
 					order.setProductList(newOrder.getProductList() == null ? existingOrder.get().getProductList() : newOrder.getProductList());
+					order.setUser(newOrder.getUser() == null ? existingOrder.get().getUser() : newOrder.getUser());
 					order.setTotalCost(calculateTotalCost(order));
 					return orderRepository.save(order);
 				})
