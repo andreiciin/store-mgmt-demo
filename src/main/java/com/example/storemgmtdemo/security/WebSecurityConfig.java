@@ -14,14 +14,14 @@ public class WebSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests()
-				.requestMatchers("/users/**").permitAll()
-				.requestMatchers("/login", "/register").permitAll()
+		http
+				.csrf().disable()
+				.authorizeHttpRequests()
+				.requestMatchers("/users/**","/login", "/register").permitAll()
 				.anyRequest().authenticated()
 				.and()
 				.formLogin()
 				.loginPage("/login")
-				.defaultSuccessUrl("/users", true)
 				.permitAll()
 				.and().logout().permitAll();
 
