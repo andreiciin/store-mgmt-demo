@@ -1,7 +1,13 @@
 package com.example.storemgmtdemo.entity;
 
-public class Product {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
+@Entity(name = "product_details")
+public class Product {
+	@Id
+	@GeneratedValue
 	private Integer id;
 	private String productName;
 	private Integer price;
@@ -12,6 +18,10 @@ public class Product {
 		this.productName = productName;
 		this.price = price;
 		this.description = description;
+	}
+
+	public Product() {
+
 	}
 
 	public Integer getId() {

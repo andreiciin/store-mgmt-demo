@@ -1,12 +1,11 @@
 package com.example.storemgmtdemo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity(name = "user_details")
 public class User {
-
 	@Id
 	@GeneratedValue
 	private Integer id;
@@ -14,8 +13,17 @@ public class User {
 	private String email;
 	private String password;
 	private String address;
-//	private String order;
 
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(
+			name = "user_roles",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id")
+	)
+	private List<Role> roles;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Order> orders;
 
 	public User(Integer id, String name, String email, String address) {
 		this.id = id;
