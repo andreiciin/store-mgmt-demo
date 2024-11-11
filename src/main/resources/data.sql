@@ -1,4 +1,5 @@
 INSERT INTO role_details(role_name, role_description) VALUES ('ADMIN', 'Administrator with full access');
+INSERT INTO role_details(role_name, role_description) VALUES ('OFFICER', 'User with access to all orders');
 INSERT INTO role_details(role_name, role_description) VALUES ('USER', 'Standard user with limited access');
 
 INSERT INTO user_details (name, email, password, address) VALUES ('Gimi', 'gimi.h@yahoo.com', 'pass123', 'Gimi Street 11');

@@ -6,59 +6,50 @@ import com.example.storemgmtdemo.entity.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
 
-	private UserRepository userRepository;
+	private UserService userService;
 
-	public UserController(UserRepository userRepository) {
-		this.userRepository = userRepository;
+	public UserController(UserService userService) {
+		this.userService = userService;
 	}
 
 	@GetMapping("/users")
-	public List<User> retrieveAllUsers() {
-		return userRepository.findAll();
+	public List<UserDTO> retrieveAllUsers() {
+		return userService.getAllUsers().stream().map(UserDTO::new).collect(Collectors.toList());
 	}
 
 	@GetMapping("/users/{id}")
-	public User retrieveUser(@PathVariable int id) {
-		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-		return user;
+	public UserDTO retrieveUser(@PathVariable int id) {
+		User user = userService.getUserById(id);
+		return new UserDTO(user);
 	}
 
 	@DeleteMapping("/users/{id}")
 	public void deleteUser(@PathVariable int id) {
-		userRepository.deleteById(id);
+		userService.deleteUser(id);
 	}
 
 	@PostMapping("/users")
 	public void createUser(@RequestBody User user) {
-		userRepository.save(user);
+		userService.createUser(user);
 	}
 
 	@PutMapping("/users/{id}")
 	public User updateUser(@PathVariable int id, @RequestBody User updatedUser) {
-		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-
-		if (updatedUser.getName() != null) user.setName(updatedUser.getName());
-		if (updatedUser.getEmail() != null) user.setEmail(updatedUser.getEmail());
-		if (updatedUser.getAddress() != null) user.setAddress(updatedUser.getAddress());
-
-		userRepository.save(user);
-
-		return user;
+		return userService.updateUser(id, updatedUser);
 	}
 
 	@GetMapping("/users/{id}/roles")
 	public List<Role> getUserRoles(@PathVariable int id) {
-		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-		return user.getRoles();
+		return userService.getUserByRoles(id);
 	}
 
 	@GetMapping("/users/{id}/orders")
 	public List<Order> getUserOrders(@PathVariable int id) {
-		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-		return user.getOrders();
+		return userService.getUserByOrders(id);
 	}
 }

@@ -1,15 +1,17 @@
 package com.example.storemgmtdemo.errorHandling;
 
+import java.time.LocalDateTime;
+
 public class ErrorResponse {
 
 	private int status;
 	private String message;
-	private long timestamp;
+	private LocalDateTime timestamp;
 
 	public ErrorResponse(int status, String message) {
 		this.status = status;
 		this.message = message;
-		this.timestamp = System.currentTimeMillis();
+		this.timestamp = LocalDateTime.now();
 	}
 
 	public int getStatus() {
@@ -28,11 +30,11 @@ public class ErrorResponse {
 		this.message = message;
 	}
 
-	public long getTimestamp() {
+	public LocalDateTime getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(long timestamp) {
+	public void setTimestamp(LocalDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
 }
