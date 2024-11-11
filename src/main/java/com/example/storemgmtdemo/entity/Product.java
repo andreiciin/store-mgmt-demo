@@ -14,15 +14,13 @@ public class Product {
 	private Integer price;
 	private String description;
 
-	public Product(Integer id, String productName, Integer price, String description) {
-		this.id = id;
+	public Product(String productName, Integer price, String description) {
 		this.productName = productName;
 		this.price = price;
 		this.description = description;
 	}
 
 	public Product() {
-
 	}
 
 	public String getProductName() {

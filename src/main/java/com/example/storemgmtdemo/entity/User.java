@@ -26,11 +26,20 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Order> orders;
 
-	public User(Integer id, String name, String email, String address) {
-		this.userId = id;
+	public User(String name, String email, String password, String address) {
 		this.name = name;
 		this.email = email;
+		this.password = password;
 		this.address = address;
+	}
+
+	public User(String name, String email, String password, String address, List<Role> roles, List<Order> orders) {
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.address = address;
+		this.roles = roles;
+		this.orders = orders;
 	}
 
 	public User() {

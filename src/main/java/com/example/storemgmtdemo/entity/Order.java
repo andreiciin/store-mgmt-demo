@@ -29,8 +29,7 @@ public class Order {
 	public Order() {
 	}
 
-	public Order(Integer id, List<Product> productList, Long totalCost, LocalDate orderDate) {
-		this.id = id;
+	public Order(List<Product> productList, Long totalCost, LocalDate orderDate) {
 		this.productList = productList;
 		this.totalCost = totalCost;
 		this.orderDate = orderDate;
