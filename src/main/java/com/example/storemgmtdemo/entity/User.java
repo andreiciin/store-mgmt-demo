@@ -42,6 +42,14 @@ public class User {
 		this.orders = orders;
 	}
 
+	public User(Integer userId, String name, String email, String password, String address) {
+		this.userId = userId;
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.address = address;
+	}
+
 	public User() {
 
 	}
@@ -92,5 +100,13 @@ public class User {
 
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 }
