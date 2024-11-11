@@ -6,7 +6,6 @@ import com.example.storemgmtdemo.entity.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -23,12 +22,8 @@ public class UserController {
 	}
 
 	@GetMapping("/users/{id}")
-	public Optional<User> retrieveUser(@PathVariable int id) {
-		Optional<User> user = userRepository.findById(id);
-
-		if (user.isEmpty())
-			throw new UserNotFoundException("User with following id does not exist: " + id);
-
+	public User retrieveUser(@PathVariable int id) {
+		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 		return user;
 	}
 
@@ -43,42 +38,27 @@ public class UserController {
 	}
 
 	@PutMapping("/users/{id}")
-	public Optional<User> updateUser(@PathVariable int id, @RequestBody User updatedUser) {
-		Optional<User> existingUser = userRepository.findById(id);
+	public User updateUser(@PathVariable int id, @RequestBody User updatedUser) {
+		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 
-		if (existingUser.get() == null) {
-			throw new UserNotFoundException("User with the following id does not exist: " + id);
-		}
-
-		User user = existingUser.get();
 		if (updatedUser.getName() != null) user.setName(updatedUser.getName());
 		if (updatedUser.getEmail() != null) user.setEmail(updatedUser.getEmail());
 		if (updatedUser.getAddress() != null) user.setAddress(updatedUser.getAddress());
 
 		userRepository.save(user);
 
-		return Optional.of(user);
+		return user;
 	}
 
 	@GetMapping("/users/{id}/roles")
 	public List<Role> getUserRoles(@PathVariable int id) {
-		Optional<User> user = userRepository.findById(id);
-
-		if (user.isEmpty()) {
-			throw new UserNotFoundException("User with the following id does not exist: " + id);
-		}
-
-		return user.get().getRoles();
+		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+		return user.getRoles();
 	}
 
 	@GetMapping("/users/{id}/orders")
 	public List<Order> getUserOrders(@PathVariable int id) {
-		Optional<User> user = userRepository.findById(id);
-
-		if (user.isEmpty()) {
-			throw new UserNotFoundException("User with the following id does not exist: " + id);
-		}
-
-		return user.get().getOrders();
+		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+		return user.getOrders();
 	}
 }

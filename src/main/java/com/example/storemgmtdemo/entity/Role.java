@@ -37,12 +37,4 @@ public class Role {
 	public void setRoleDescription(String roleDescription) {
 		this.roleDescription = roleDescription;
 	}
-
-	public Integer getId() {
-		return roleId;
-	}
-
-	public void setId(Integer id) {
-		this.roleId = id;
-	}
 }

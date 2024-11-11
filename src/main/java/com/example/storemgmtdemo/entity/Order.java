@@ -36,14 +36,6 @@ public class Order {
 		this.orderDate = orderDate;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public List<Product> getProductList() {
 		return productList;
 	}

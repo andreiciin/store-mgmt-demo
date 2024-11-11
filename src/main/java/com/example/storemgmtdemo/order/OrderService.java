@@ -2,13 +2,13 @@ package com.example.storemgmtdemo.order;
 
 import com.example.storemgmtdemo.entity.Order;
 import com.example.storemgmtdemo.entity.Product;
+import com.example.storemgmtdemo.product.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -25,11 +25,11 @@ public class OrderService {
 	}
 
 	public Order getOrderById(Integer id) {
-		return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Order with the following id does not exist: " + id));
+		return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
 	}
 
 	public void deleteOrderById(Integer id) {
-		Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Order with the following id does not exist: " + id));
+		Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
 		order.getProductList().clear();
 		orderRepository.save(order);
 		orderRepository.deleteById(id);
@@ -40,24 +40,21 @@ public class OrderService {
 	}
 
 	public Order updateOrder(Integer id, Order newOrder) {
-		Optional<Order> existingOrder = orderRepository.findById(id);
-		if (existingOrder.get() == null ) {
-			throw new OrderNotFoundException("Order with the following id does not exist: " + id);
-		}
+		Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
 		return orderRepository.findById(id)
 				.map(order -> {
-					order.setTotalCost(newOrder.getTotalCost() == null ? existingOrder.get().getTotalCost() : newOrder.getTotalCost());
-					order.setOrderDate(newOrder.getOrderDate() == null ? existingOrder.get().getOrderDate() : newOrder.getOrderDate());
-					order.setProductList(newOrder.getProductList() == null ? existingOrder.get().getProductList() : newOrder.getProductList());
-					order.setUser(newOrder.getUser() == null ? existingOrder.get().getUser() : newOrder.getUser());
+					order.setTotalCost(newOrder.getTotalCost() == null ? existingOrder.getTotalCost() : newOrder.getTotalCost());
+					order.setOrderDate(newOrder.getOrderDate() == null ? existingOrder.getOrderDate() : newOrder.getOrderDate());
+					order.setProductList(newOrder.getProductList() == null ? existingOrder.getProductList() : newOrder.getProductList());
+					order.setUser(newOrder.getUser() == null ? existingOrder.getUser() : newOrder.getUser());
 					order.setTotalCost(calculateTotalCost(order));
 					return orderRepository.save(order);
 				})
-				.orElseThrow(() -> new OrderNotFoundException("Order with the following id does not exist: " + id));
+				.orElseThrow(() -> new OrderNotFoundException(id));
 	}
 
 	public List<Product> getProductsByOrderId(Integer id) {
-		Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException("Order with the following id does not exist: " + id));
+		Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
 		return order.getProductList();
 	}
 

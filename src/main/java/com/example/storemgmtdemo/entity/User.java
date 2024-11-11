@@ -1,6 +1,7 @@
 package com.example.storemgmtdemo.entity;
 
 import jakarta.persistence.*;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
@@ -34,14 +35,6 @@ public class User {
 
 	public User() {
 
-	}
-
-	public Integer getId() {
-		return userId;
-	}
-
-	public void setId(Integer id) {
-		this.userId = id;
 	}
 
 	public String getName() {
