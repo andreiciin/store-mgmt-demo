@@ -3,13 +3,26 @@ package com.example.storemgmtdemo;
 import com.example.storemgmtdemo.entity.Order;
 import com.example.storemgmtdemo.entity.Role;
 import com.example.storemgmtdemo.entity.User;
+import com.example.storemgmtdemo.user.UserRepository;
+import com.example.storemgmtdemo.user.UserService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SpringBootTest
 public class UserTest {
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@Test
 	void testUserCreation() {
@@ -32,5 +45,16 @@ public class UserTest {
 
 		assertThat(user.getRoles()).hasSize(1);
 		assertThat(user.getRoles().get(0).getRoleName()).isEqualTo("ADMIN");
+	}
+
+	@Test
+	public void testPasswordIsEncoded() {
+		User user = new User();
+		user.setPassword("plainTextPassword");
+		userService.createUser(user);
+
+		User savedUser = userRepository.findById(user.getUserId()).orElse(null);
+		assertNotNull(savedUser);
+		assertNotEquals("plainTextPassword", savedUser.getPassword());
 	}
 }
