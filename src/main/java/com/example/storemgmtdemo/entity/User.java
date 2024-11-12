@@ -1,7 +1,6 @@
 package com.example.storemgmtdemo.entity;
 
 import jakarta.persistence.*;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
