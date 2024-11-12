@@ -4,7 +4,8 @@ import com.example.storemgmtdemo.entity.Order;
 import com.example.storemgmtdemo.entity.Product;
 import com.example.storemgmtdemo.entity.Role;
 import com.example.storemgmtdemo.entity.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +13,11 @@ import java.util.List;
 @Service
 public class UserService {
 
-	private final UserRepository userRepository;
-	private final PasswordEncoder passwordEncoder;
+	private UserRepository userRepository;
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
-	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+	public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
@@ -40,7 +42,7 @@ public class UserService {
 	}
 
 	public User createUser(User user) {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		encodePassword(user);
 		return userRepository.save(user);
 	}
 
@@ -51,7 +53,7 @@ public class UserService {
 		if (updatedUser.getEmail() != null) user.setEmail(updatedUser.getEmail());
 		if (updatedUser.getAddress() != null) user.setAddress(updatedUser.getAddress());
 		if (updatedUser.getPassword() != null) {
-			user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+			encodePassword(user);
 		}
 
 		return userRepository.save(user);
@@ -77,5 +79,10 @@ public class UserService {
 		return order.getProductList().stream()
 				.mapToLong(Product::getPrice)
 				.sum();
+	}
+
+	private void encodePassword(User user) {
+		String encodedPassword = passwordEncoder.encode(user.getPassword());
+		user.setPassword(encodedPassword);
 	}
 }

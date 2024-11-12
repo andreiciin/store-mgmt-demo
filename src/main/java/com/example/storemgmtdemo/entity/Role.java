@@ -1,9 +1,9 @@
 package com.example.storemgmtdemo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity(name = "role_details")
 public class Role {
@@ -13,6 +13,10 @@ public class Role {
 	private Integer roleId;
 	private String roleName;
 	private String roleDescription;
+
+	@ManyToMany(mappedBy = "roles")
+	@JsonIgnore
+	private List<User> users;
 
 	public Role() {
 	}

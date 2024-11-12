@@ -3,6 +3,9 @@ package com.example.storemgmtdemo.user;
 import com.example.storemgmtdemo.entity.Order;
 import com.example.storemgmtdemo.entity.Role;
 import com.example.storemgmtdemo.entity.User;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,8 +51,13 @@ public class UserController {
 		return userService.getUserByRoles(id);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN') or #id == principal.id")
 	@GetMapping("/users/{id}/orders")
-	public List<Order> getUserOrders(@PathVariable int id) {
+	public List<Order> getUserOrders(@PathVariable int id, @AuthenticationPrincipal User authenticatedUser) {
+		if (authenticatedUser == null || id != authenticatedUser.getUserId()) {
+			throw new AccessDeniedException("You cannot access orders of other users.");
+		}
+
 		return userService.getUserByOrders(id);
 	}
 }
